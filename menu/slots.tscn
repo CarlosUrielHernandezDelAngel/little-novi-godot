@@ -1,0 +1,232 @@
+[gd_scene format=3 uid="uid://c8tq1meaq0sl"]
+
+[ext_resource type="Script" uid="uid://dfl4v2dd6668b" path="res://menu/slots.gd" id="1_2b3pq"]
+[ext_resource type="Texture2D" uid="uid://biuekuq3kou1v" path="res://summer6/Summer6.png" id="2_2b3pq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2b3pq"]
+bg_color = Color(0.3534693, 0.77931505, 0.9428401, 0.93333334)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p6kjp"]
+bg_color = Color(0.3, 0.3, 0.3, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.5, 0.5, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="Control" type="Control" unique_id=1820708934]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2b3pq")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=192405851]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_2b3pq")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Panel" type="Panel" parent="." unique_id=1687175339]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2b3pq")
+
+[node name="Label" type="Label" parent="Panel" unique_id=903630956]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -230.0
+offset_right = 230.0
+offset_bottom = 28.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "SISTEMA DE GUARDADO - SELECCIONA UN SLOT"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1389216836]
+clip_contents = true
+custom_minimum_size = Vector2(800, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="slot1_container" type="Control" parent="VBoxContainer" unique_id=647698173]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_stretch_ratio = 0.92
+
+[node name="slot1_texture" type="TextureRect" parent="VBoxContainer/slot1_container" unique_id=1792958767]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 1.0
+offset_right = 216.0
+offset_bottom = 1.0
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="slot1_vbox" type="VBoxContainer" parent="VBoxContainer/slot1_container" unique_id=524264176]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 224.0
+offset_right = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/slot1_container/slot1_vbox" unique_id=1892241400]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "[SLOT 1 - VACÍO]"
+
+[node name="Button" type="Button" parent="VBoxContainer/slot1_container/slot1_vbox" unique_id=1169369877]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Cargar Slot 1"
+
+[node name="slot2_container" type="Control" parent="VBoxContainer" unique_id=511958496]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="slot2_texture" type="TextureRect" parent="VBoxContainer/slot2_container" unique_id=992908435]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 1.0
+offset_right = 216.0
+offset_bottom = 1.0
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="slot2_vbox" type="VBoxContainer" parent="VBoxContainer/slot2_container" unique_id=1138900484]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 224.0
+offset_right = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/slot2_container/slot2_vbox" unique_id=591253038]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "[SLOT 2 - VACÍO]"
+
+[node name="Button" type="Button" parent="VBoxContainer/slot2_container/slot2_vbox" unique_id=50486753]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Cargar Slot 2"
+
+[node name="slot3_container" type="Control" parent="VBoxContainer" unique_id=917516025]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="slot3_texture" type="TextureRect" parent="VBoxContainer/slot3_container" unique_id=2146083568]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 1.0
+offset_right = 216.0
+offset_bottom = 1.0
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="slot3_vbox" type="VBoxContainer" parent="VBoxContainer/slot3_container" unique_id=1770324892]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -576.0
+offset_right = -16.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/slot3_container/slot3_vbox" unique_id=1523419181]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "[SLOT 3 - VACÍO]"
+
+[node name="Button" type="Button" parent="VBoxContainer/slot3_container/slot3_vbox" unique_id=2050742602]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Cargar Slot 3"
+
+[node name="menu_flotante" type="Panel" parent="." unique_id=1086135831]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.9
+anchor_top = 0.05
+anchor_right = 0.98
+anchor_bottom = 0.25
+offset_left = -28.799927
+offset_top = -9.400002
+offset_right = -28.799927
+offset_bottom = -99.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_p6kjp")
+
+[node name="btn_menu" type="Button" parent="menu_flotante" unique_id=57432484]
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 0
+offset_left = -28.919983
+offset_right = 121.08002
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 18
+action_mode = 0
+text = "Menú"

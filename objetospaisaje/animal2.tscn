@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://um5bw3ms383b"]
+
+[ext_resource type="Script" uid="uid://dprhf7bx712g0" path="res://objetospaisaje/animal_1.gd" id="1_jikwd"]
+[ext_resource type="Texture2D" uid="uid://cgcri2xb3e6hf" path="res://animales/Hare_Run.png" id="2_jikwd"]
+[ext_resource type="Texture2D" uid="uid://cuy15brkty4u3" path="res://animales/Hare_Idle.png" id="3_c2wr7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5sxk"]
+size = Vector2(35, 76)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ir0d6"]
+atlas = ExtResource("2_jikwd")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1b0bg"]
+atlas = ExtResource("2_jikwd")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xe6xu"]
+atlas = ExtResource("2_jikwd")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fhv83"]
+atlas = ExtResource("2_jikwd")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lg6r"]
+atlas = ExtResource("2_jikwd")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6v77t"]
+atlas = ExtResource("2_jikwd")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kmt65"]
+atlas = ExtResource("3_c2wr7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4eo1i"]
+atlas = ExtResource("3_c2wr7")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4k0be"]
+atlas = ExtResource("3_c2wr7")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q1kpu"]
+atlas = ExtResource("3_c2wr7")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vu7hl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ir0d6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1b0bg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xe6xu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fhv83")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0lg6r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6v77t")
+}],
+"loop": true,
+"name": &"feliz",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kmt65")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4eo1i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4k0be")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q1kpu")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jikwd"]
+bg_color = Color(0.7666196, 0.76661956, 0.76661944, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jpaub"]
+radius = 14.3178215
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=1426212665]
+position = Vector2(-22, -2)
+script = ExtResource("1_jikwd")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1286597449]
+position = Vector2(52, -26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1247528553]
+position = Vector2(-2.5, -45)
+shape = SubResource("RectangleShape2D_t5sxk")
+
+[node name="SpriteAnimal" type="AnimatedSprite2D" parent="." unique_id=1841459645]
+position = Vector2(52, -81)
+scale = Vector2(3.1562498, 3.2187502)
+sprite_frames = SubResource("SpriteFrames_vu7hl")
+animation = &"idle"
+frame_progress = 0.7597601
+
+[node name="TextoCorazon" type="Label" parent="." unique_id=1590083047]
+visible = false
+offset_left = 78.0
+offset_top = -134.0
+offset_right = 122.0
+offset_bottom = -89.0
+theme_override_font_sizes/font_size = 32
+text = "💕"
+
+[node name="TextoDialogo" type="Label" parent="." unique_id=2054594139]
+visible = false
+offset_left = 86.0
+offset_top = -90.0
+offset_right = 171.0
+offset_bottom = -62.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.24115604, 0.24115604, 0.24115604, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_jikwd")
+text = "Pulsa al animal para acariciar"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1241577360]
+position = Vector2(51, -56)
+shape = SubResource("CircleShape2D_jpaub")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

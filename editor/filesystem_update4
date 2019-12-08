@@ -1,0 +1,17 @@
+res://mundo/escenario1.tscn
+res://prota.gd
+res://objetospaisaje/animal1.tscn
+res://objetospaisaje/animal_1.gd
+res://objetospaisaje/prota.tscn
+res://objetospaisaje/animal2.tscn
+res://objetospaisaje/animal3.tscn
+res://personaje.gd
+res://objetospaisaje/jugador.tscn
+res://mundo/escenario_1.gd
+res://scenes/cap_1.tscn
+res://scripts/novi.gd
+res://mundo/area_2d.gd
+res://rompecabezas/rompecabezas.tscn
+res://rompecabezas/rompecabezas.gd
+res://control.gd
+res://menu/final.tscn

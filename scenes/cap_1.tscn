@@ -1,0 +1,233 @@
+[gd_scene format=3 uid="uid://mq3d7j3upxxc"]
+
+[ext_resource type="Script" uid="uid://di6gpeoyka222" path="res://scripts/cap_1.gd" id="1_hb74n"]
+[ext_resource type="Texture2D" uid="uid://ce8bnou54foyi" path="res://summer 1/Summer1.png" id="2_4op52"]
+[ext_resource type="Texture2D" uid="uid://dljpqohfx14h3" path="res://assets/gato/CAT BASE_1.png" id="3_4op52"]
+[ext_resource type="Texture2D" uid="uid://dhuumti1w1tmu" path="res://assets/personaje/AnimationSheet_Character (1).png" id="4_funiu"]
+[ext_resource type="Texture2D" uid="uid://c6nwti4pgckki" path="res://assets/personaje/AnimationSheet_Character (3).png" id="5_xdsaa"]
+[ext_resource type="Texture2D" uid="uid://cgxfvlq5gyo7e" path="res://assets/personaje/AnimationSheet_Character (2).png" id="6_lb65q"]
+[ext_resource type="Script" uid="uid://dwx57321wvf7u" path="res://scripts/novi.gd" id="7_4op52"]
+[ext_resource type="Script" uid="uid://cks4pgw4i4yhq" path="res://scripts/menu_conversacion.gd" id="7_fevyc"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_l47np"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ukyu8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxPanel_menu"]
+bg_color = Color(0.3, 0.3, 0.3, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.5, 0.5, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxPanel_confirmacion"]
+bg_color = Color(0.2, 0.2, 0.2, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8, 0.2, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Cap1" type="Control" unique_id=526565439]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hb74n")
+
+[node name="Fondo" type="TextureRect" parent="." unique_id=1336644896]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_4op52")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Personajes" type="Node2D" parent="." unique_id=1356062839]
+
+[node name="Novi" type="Sprite2D" parent="Personajes" unique_id=1906567533]
+position = Vector2(640, 500)
+
+[node name="Panic" type="Sprite2D" parent="Personajes/Novi" unique_id=9634786]
+visible = false
+position = Vector2(-415, -75)
+scale = Vector2(7.658967, 5.989132)
+texture = ExtResource("3_4op52")
+
+[node name="Normal" type="Sprite2D" parent="Personajes/Novi" unique_id=1181070003]
+visible = false
+position = Vector2(-428, -84.000015)
+scale = Vector2(55.504, 50)
+texture = ExtResource("4_funiu")
+
+[node name="Nervous" type="Sprite2D" parent="Personajes/Novi" unique_id=2014035834]
+visible = false
+position = Vector2(-484, -65)
+scale = Vector2(7.861672, 6.6804233)
+texture = ExtResource("5_xdsaa")
+
+[node name="Bored" type="Sprite2D" parent="Personajes/Novi" unique_id=277278931]
+visible = false
+position = Vector2(-403, -166)
+scale = Vector2(16.17907, 14.348317)
+texture = ExtResource("6_lb65q")
+
+[node name="DialogosBase" type="Node2D" parent="." unique_id=422307965]
+
+[node name="ContenedorDialogo" type="Sprite2D" parent="DialogosBase" unique_id=2025577607]
+modulate = Color(1, 1, 1, 0.3019608)
+self_modulate = Color(0, 0.44377333, 0.70747995, 1)
+position = Vector2(576, 560)
+scale = Vector2(1097.5, 134.00003)
+texture = SubResource("PlaceholderTexture2D_l47np")
+
+[node name="ContenedorNombre" type="Sprite2D" parent="DialogosBase" unique_id=1623868844]
+position = Vector2(230.00002, 516)
+scale = Vector2(327, 54)
+texture = SubResource("CanvasTexture_ukyu8")
+
+[node name="Dialogos" type="Control" parent="." unique_id=51100319]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Novi" type="Control" parent="Dialogos" unique_id=273272660]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("7_4op52")
+
+[node name="saludo" type="RichTextLabel" parent="Dialogos/Novi" unique_id=1478599818]
+self_modulate = Color(0.97171897, 0.85338444, 0.9526935, 1)
+layout_mode = 0
+offset_left = 40.0
+offset_top = 544.0
+offset_right = 1102.0
+offset_bottom = 613.0
+theme_override_font_sizes/normal_font_size = 20
+text = "Are you..?"
+scroll_active = false
+autowrap_mode = 2
+tab_size = 24
+justification_flags = 171
+text_direction = 1
+
+[node name="Nombres" type="Control" parent="Dialogos" unique_id=1959479515]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CajaNombre" type="RichTextLabel" parent="Dialogos/Nombres" unique_id=439950281]
+self_modulate = Color(0.80784315, 0.29411766, 0.99215686, 1)
+layout_mode = 0
+offset_left = 80.0
+offset_top = 488.0
+offset_right = 395.0
+offset_bottom = 538.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 36
+text = "Novi"
+fit_content = true
+scroll_active = false
+
+[node name="MenuFlotante" type="Panel" parent="." unique_id=1820708935]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.9
+anchor_top = 0.05
+anchor_right = 0.98
+anchor_bottom = 0.25
+offset_left = -12.799927
+offset_top = -24.400002
+offset_right = -12.799927
+offset_bottom = -24.399994
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxPanel_menu")
+script = ExtResource("7_fevyc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuFlotante" unique_id=1389216837]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="BtnGuardar" type="Button" parent="MenuFlotante/VBoxContainer" unique_id=585440516]
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+action_mode = 0
+text = "Guardar"
+
+[node name="BtnCargar" type="Button" parent="MenuFlotante/VBoxContainer" unique_id=585440517]
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+action_mode = 0
+text = "Cargar"
+
+[node name="BtnMenu" type="Button" parent="MenuFlotante/VBoxContainer" unique_id=585440518]
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+action_mode = 0
+text = "Menú"
+
+[node name="PanelConfirmacion" type="Panel" parent="." unique_id=1820708936]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.35
+anchor_right = 0.75
+anchor_bottom = 0.65
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxPanel_confirmacion")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelConfirmacion" unique_id=1389216838]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Etiqueta" type="Label" parent="PanelConfirmacion/VBoxContainer" unique_id=903630957]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "¿Regresar al menú sin guardar?"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelConfirmacion/VBoxContainer" unique_id=1389216839]
+layout_mode = 2
+alignment = 1
+
+[node name="BtnConfirmar" type="Button" parent="PanelConfirmacion/VBoxContainer/HBoxContainer" unique_id=585440519]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Sí"
+
+[node name="BtnCancelar" type="Button" parent="PanelConfirmacion/VBoxContainer/HBoxContainer" unique_id=585440520]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "No"

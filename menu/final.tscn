@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://du5l14jeqsqx4"]
+
+[ext_resource type="Script" uid="uid://bh7srrgafuaiq" path="res://control.gd" id="1_vbx7p"]
+[ext_resource type="Texture2D" uid="uid://bft84hsiyir6l" path="res://summer 2/Summer2.png" id="2_fyblm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g3nfx"]
+bg_color = Color(0.94200504, 0.653182, 1.92523e-06, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1372106326]
+
+[node name="Control" type="Control" parent="." unique_id=622053189]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_vbx7p")
+
+[node name="TextureRect" type="TextureRect" parent="Control" unique_id=2036969870]
+layout_mode = 0
+offset_right = 1157.0
+offset_bottom = 670.0
+texture = ExtResource("2_fyblm")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=1006656824]
+layout_mode = 0
+offset_left = 186.0
+offset_top = 144.0
+offset_right = 968.0
+offset_bottom = 503.0
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/VBoxContainer" unique_id=2047840481]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 1)
+theme_override_font_sizes/font_size = 32
+text = "Juego terminado, este atento a proximas entregas.
+
+"
+
+[node name="Button2" type="Button" parent="Control/VBoxContainer" unique_id=1899664171]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.00027238316, 6.941765e-05, 1.7626008e-11, 1)
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_g3nfx")
+text = "Cerrar juego"
+
+[connection signal="pressed" from="Control/VBoxContainer/Button2" to="Control" method="_on_button_2_pressed"]

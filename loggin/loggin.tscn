@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://dg384l660gnul"]
+
+[ext_resource type="Script" uid="uid://cxpqf8t8up65u" path="res://loggin/loggin.gd" id="1_dei3s"]
+[ext_resource type="Texture2D" uid="uid://bi6jqifilb11o" path="res://summer 4/Summer4.png" id="2_hoera"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4dscr"]
+bg_color = Color(0.99607843, 0.99607843, 0.99607843, 0.5254902)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dei3s"]
+bg_color = Color(0.18837142, 0.18837148, 0.18837133, 1)
+
+[node name="Control" type="Control" unique_id=2054882188]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dei3s")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=932272728]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_hoera")
+expand_mode = 1
+stretch_mode = 6
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="." unique_id=593902501]
+layout_mode = 0
+offset_left = 327.0
+offset_top = 103.0
+offset_right = 831.0
+offset_bottom = 156.0
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=321547633]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -390.0
+offset_top = -264.0
+offset_right = 416.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 2
+
+[node name="usuario" type="LineEdit" parent="VBoxContainer" unique_id=9158695]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_uneditable_color = Color(0, 0, 0, 0.5019608)
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.827451)
+theme_override_styles/normal = SubResource("StyleBoxFlat_4dscr")
+placeholder_text = "Introduce usuario"
+
+[node name="contraseña" type="LineEdit" parent="VBoxContainer" unique_id=1977265546]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_4dscr")
+placeholder_text = "Introduce la contraseña"
+
+[node name="Button" type="Button" parent="VBoxContainer" unique_id=1786707415]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_dei3s")
+text = "Iniciar sesion"
+
+[node name="RegisterButton" type="Button" parent="VBoxContainer" unique_id=1752979984]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_dei3s")
+text = "Registrar"

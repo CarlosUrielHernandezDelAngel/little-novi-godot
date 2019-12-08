@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://j64t7w2l5g7w"]
+
+[ext_resource type="Texture2D" uid="uid://cbepdjwj7ervr" path="res://assets/arboles/WhatsApp_Image_2026-06-06_at_16.15.27-removebg-preview.png" id="1_oibt5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0fn5d"]
+size = Vector2(76.94141, 68.50716)
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=331771161]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1296923551]
+position = Vector2(83.99999, 84)
+scale = Vector2(1.3228346, 1.3125001)
+texture = ExtResource("1_oibt5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=162881838]
+position = Vector2(72.00001, 152)
+scale = Vector2(0.3298947, 0.3503284)
+shape = SubResource("RectangleShape2D_0fn5d")

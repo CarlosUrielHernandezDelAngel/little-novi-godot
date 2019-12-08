@@ -1,0 +1,734 @@
+# ============================================================================
+# SISTEMA MEJORADO DE GUARDADO CON MÚLTIPLES SLOTS
+# Incluye miniaturas de pantalla, fecha/hora y visualización en la interfaz
+# ============================================================================
+
+extends Control
+
+# ============================================================================
+# CONSTANTES - Configuración de slots
+# ============================================================================
+const NUMERO_SLOTS = 3  # Total de ranuras disponibles
+const RUTA_BASE = "user://"  # Ruta base para guardar archivos
+const NOMBRE_ARCHIVO_JSON = "slot%d.json"  # Formato: slot1.json, slot2.json, etc.
+const NOMBRE_ARCHIVO_PNG = "slot%d.png"  # Formato: slot1.png, slot2.png, etc.
+const TAMAÑO_MINIATURA = Vector2(200, 150)  # Tamaño de la miniatura
+
+# ============================================================================
+# REFERENCIAS A NODOS DE LOS CONTENEDORES DE SLOTS
+# ============================================================================
+# Contenedor para el Slot 1 (con TextureRect, Label y Button)
+@onready var slot1_container: Control = $VBoxContainer/slot1_container
+@onready var slot1_texture: TextureRect = slot1_container.get_node("TextureRect")
+@onready var slot1_label: Label = slot1_container.get_node("Label")
+@onready var slot1_button: Button = slot1_container.get_node("Button")
+
+# Contenedor para el Slot 2 (con TextureRect, Label y Button)
+@onready var slot2_container: Control = $VBoxContainer/slot2_container
+@onready var slot2_texture: TextureRect = slot2_container.get_node("TextureRect")
+@onready var slot2_label: Label = slot2_container.get_node("Label")
+@onready var slot2_button: Button = slot2_container.get_node("Button")
+
+# Contenedor para el Slot 3 (con TextureRect, Label y Button)
+@onready var slot3_container: Control = $VBoxContainer/slot3_container
+@onready var slot3_texture: TextureRect = slot3_container.get_node("TextureRect")
+@onready var slot3_label: Label = slot3_container.get_node("Label")
+@onready var slot3_button: Button = slot3_container.get_node("Button")
+
+# ============================================================================
+# VARIABLES DE SESIÓN
+# ============================================================================
+var progreso_actual: Dictionary = {}  # Datos de progreso actual
+var slot_seleccionado: int = 0  # Slot actualmente seleccionado
+
+
+func _ready() -> void:
+	# Conectamos los botones a sus respectivas funciones
+	slot1_button.pressed.connect(func(): _on_slot_pressed(1))
+	slot2_button.pressed.connect(func(): _on_slot_pressed(2))
+	slot3_button.pressed.connect(func(): _on_slot_pressed(3))
+	
+	# Actualizamos la información de todos los slots al iniciar
+	actualizar_informacion_todos_slots()
+	
+	print("✓ Menú de slots mejorado cargado")
+
+
+# ============================================================================
+# FUNCIÓN: Actualiza la información visual de todos los slots
+# ============================================================================
+func actualizar_informacion_todos_slots() -> void:
+	# Actualizar cada slot
+	for numero_slot in range(1, NUMERO_SLOTS + 1):
+		_actualizar_slot_visual(numero_slot)
+
+
+# ============================================================================
+# FUNCIÓN AUXILIAR: Actualiza la visualización de un slot específico
+# ============================================================================
+func _actualizar_slot_visual(numero_slot: int) -> void:
+	# Obtener referencias a los nodos del slot
+	var texture_rect: TextureRect
+	var label: Label
+	
+	# Seleccionar los nodos según el número de slot
+	match numero_slot:
+		1:
+			texture_rect = slot1_texture
+			label = slot1_label
+		2:
+			texture_rect = slot2_texture
+			label = slot2_label
+		3:
+			texture_rect = slot3_texture
+			label = slot3_label
+		_:
+			return
+	
+	# Cargar los datos del slot
+	var progreso = cargar_progreso_de_slot(numero_slot)
+	
+	# Si el slot está vacío, mostrar estado vacío
+	if progreso.is_empty():
+		texture_rect.texture = null  # Sin miniatura
+		label.text = "[SLOT %d - VACÍO]" % numero_slot
+		return
+	
+	# Si el slot tiene datos, cargar la miniatura y mostrar fecha/hora
+	var ruta_miniatura = RUTA_BASE + (NOMBRE_ARCHIVO_PNG % numero_slot)
+	
+	# Intentar cargar la imagen guardada
+	if ResourceLoader.exists(ruta_miniatura):
+		var imagen = load(ruta_miniatura)
+		texture_rect.texture = imagen
+	else:
+		texture_rect.texture = null  # Si no existe, dejar vacío
+	
+	# Formatear y mostrar información
+	var fecha_hora = _convertir_timestamp_a_texto(progreso.get("timestamp", 0))
+	var capitulo = progreso.get("capitulo_actual", 1)
+	var dialogo = progreso.get("indice_dialogo", 0)
+	
+	label.text = "Slot %d - Cap. %d | Diálogo %d\n%s" % [
+		numero_slot,
+		capitulo,
+		dialogo,
+		fecha_hora
+	]
+
+
+# ============================================================================
+# FUNCIÓN: Manejador cuando se presiona un botón de slot
+# ============================================================================
+func _on_slot_pressed(numero_slot: int) -> void:
+	print("📌 Slot %d seleccionado" % numero_slot)
+	
+	slot_seleccionado = numero_slot
+	
+	# Cargar el progreso del slot
+	var progreso = cargar_progreso_de_slot(numero_slot)
+	
+	# Si el slot está vacío, crear progreso inicial
+	if progreso.is_empty():
+		print("⚠ El slot %d está vacío. Creando nuevo guardado..." % numero_slot)
+		progreso = _crear_progreso_inicial()
+	
+	# Almacenar el progreso actual
+	progreso_actual = progreso
+	
+	print("✓ Slot %d cargado exitosamente" % numero_slot)
+	print("  → Capítulo: %d | Diálogo: %d" % [progreso.capitulo_actual, progreso.indice_dialogo])
+
+
+# ============================================================================
+# FUNCIÓN PRINCIPAL: Guarda el progreso en un slot con miniatura y fecha
+# ============================================================================
+func guardar_progreso_en_slot(numero_slot: int) -> bool:
+	# Validar que el número de slot sea válido
+	if numero_slot < 1 or numero_slot > NUMERO_SLOTS:
+		push_error("❌ Número de slot inválido: %d. Debe estar entre 1 y %d" % [numero_slot, NUMERO_SLOTS])
+		return false
+	
+	# Crear la ruta de los archivos
+	var nombre_archivo_json = NOMBRE_ARCHIVO_JSON % numero_slot
+	var nombre_archivo_png = NOMBRE_ARCHIVO_PNG % numero_slot
+	var ruta_json = RUTA_BASE + nombre_archivo_json
+	var ruta_png = RUTA_BASE + nombre_archivo_png
+	
+	# Validar que hay datos de progreso
+	if progreso_actual.is_empty():
+		push_error("❌ No hay datos de progreso para guardar")
+		return false
+	
+	# Crear el diccionario con los datos del progreso
+	var datos_progreso = {
+		"numero_slot": numero_slot,
+		"capitulo_actual": progreso_actual.get("capitulo_actual", 1),
+		"indice_dialogo": progreso_actual.get("indice_dialogo", 0),
+		"estado_puzzles": progreso_actual.get("estado_puzzles", {}),
+		"timestamp": Time.get_ticks_msec()  # Marca de tiempo actual
+	}
+	
+	# Convertir el diccionario a formato JSON con indentación
+	var json_string = JSON.stringify(datos_progreso, "\t")
+	
+	# ========== GUARDAR ARCHIVO JSON ==========
+	var archivo = FileAccess.open(ruta_json, FileAccess.WRITE)
+	if archivo == null:
+		push_error("❌ No se pudo abrir el archivo JSON: " + ruta_json)
+		return false
+	
+	# Escribir el contenido JSON
+	archivo.store_string(json_string)
+	
+	# Verificar que el JSON se guardó
+	if not FileAccess.file_exists(ruta_json):
+		push_error("❌ Error al guardar el archivo JSON del slot %d" % numero_slot)
+		return false
+	
+	# ========== CAPTURAR Y GUARDAR MINIATURA ==========
+	# Capturar la pantalla actual
+	var miniatura = _capturar_pantalla()
+	
+	if miniatura != null:
+		# Guardar la miniatura como imagen PNG
+		var error = miniatura.save_png(ruta_png)
+		
+		if error == OK:
+			print("✓ Miniatura guardada en: " + ruta_png)
+		else:
+			push_error("❌ Error al guardar la miniatura PNG del slot %d" % numero_slot)
+			# No es crítico si falla la miniatura, continuamos
+	
+	# Actualizar información visual del slot
+	_actualizar_slot_visual(numero_slot)
+	
+	print("✓ Progreso guardado exitosamente en Slot %d" % numero_slot)
+	print("  → JSON: %s" % ruta_json)
+	print("  → PNG: %s" % ruta_png)
+	
+	return true
+
+
+# ============================================================================
+# FUNCIÓN: Captura la pantalla actual y la redimensiona
+# ============================================================================
+func _capturar_pantalla() -> Image:
+	# Obtener la pantalla actual
+	var viewport = get_viewport()
+	
+	# Capturar la imagen del viewport
+	var imagen = viewport.get_texture().get_image()
+	
+	if imagen == null:
+		push_error("❌ No se pudo capturar la pantalla")
+		return null
+	
+	# Redimensionar la imagen al tamaño de la miniatura
+	imagen.resize(int(TAMAÑO_MINIATURA.x), int(TAMAÑO_MINIATURA.y))
+	
+	print("✓ Pantalla capturada y redimensionada a %dx%d" % [int(TAMAÑO_MINIATURA.x), int(TAMAÑO_MINIATURA.y)])
+	
+	return imagen
+
+
+# ============================================================================
+# FUNCIÓN PRINCIPAL: Carga el progreso desde un slot
+# ============================================================================
+func cargar_progreso_de_slot(numero_slot: int) -> Dictionary:
+	# Validar que el número de slot sea válido
+	if numero_slot < 1 or numero_slot > NUMERO_SLOTS:
+		push_error("❌ Número de slot inválido: %d" % numero_slot)
+		return {}
+	
+	# Crear la ruta del archivo JSON para este slot
+	var nombre_archivo = NOMBRE_ARCHIVO_JSON % numero_slot
+	var ruta_archivo = RUTA_BASE + nombre_archivo
+	
+	# Verificar si el archivo existe
+	if not FileAccess.file_exists(ruta_archivo):
+		print("⚠ Slot %d vacío - Archivo no encontrado" % numero_slot)
+		return {}
+	
+	# Intenta leer el archivo de progreso
+	var archivo = FileAccess.open(ruta_archivo, FileAccess.READ)
+	if archivo == null:
+		push_error("❌ No se pudo abrir el archivo del Slot %d" % numero_slot)
+		return {}
+	
+	# Obtener todo el contenido del archivo como string
+	var contenido_json = archivo.get_as_text()
+	
+	# Validar que el contenido no esté vacío
+	if contenido_json.is_empty():
+		push_error("❌ El archivo del Slot %d está vacío" % numero_slot)
+		return {}
+	
+	# Parsear el contenido JSON a un diccionario
+	var json = JSON.new()
+	var error = json.parse(contenido_json)
+	
+	# Verificar si el parseo fue exitoso
+	if error != OK:
+		push_error("❌ Error al parsear JSON del Slot %d: %s" % [numero_slot, json.get_error_message()])
+		return {}
+	
+	# Validar que los datos parseados sean un diccionario
+	var datos = json.data
+	if datos is not Dictionary:
+		push_error("❌ Formato JSON inválido en Slot %d" % numero_slot)
+		return {}
+	
+	# Validar que contiene los campos esenciales
+	if not _validar_datos_progreso(datos):
+		push_error("❌ El archivo del Slot %d está corrupto o incompleto" % numero_slot)
+		return {}
+	
+	# Progreso cargado exitosamente
+	print("✓ Progreso cargado del Slot %d" % numero_slot)
+	
+	return datos
+
+
+# ============================================================================
+# FUNCIÓN: Convierte un timestamp a texto legible (fecha y hora)
+# ============================================================================
+func _convertir_timestamp_a_texto(timestamp_ms: int) -> String:
+	# Si el timestamp es 0 o inválido, retornar texto vacío
+	if timestamp_ms <= 0:
+		return "Desconocido"
+	
+	# Convertir milisegundos a segundos
+	var timestamp_s = timestamp_ms / 1000
+	
+	# Usar la función de Godot para convertir timestamp a diccionario de fecha/hora
+	var fecha_hora = Time.get_datetime_dict_from_unix_time(timestamp_s)
+	
+	# Formatear como: "DD/MM/YYYY - HH:MM:SS"
+	var fecha_texto = "%04d/%02d/%02d - %02d:%02d:%02d" % [
+		fecha_hora.year,
+		fecha_hora.month,
+		fecha_hora.day,
+		fecha_hora.hour,
+		fecha_hora.minute,
+		fecha_hora.second
+	]
+	
+	return fecha_texto
+
+
+# ============================================================================
+# FUNCIÓN: Elimina completamente un slot (JSON y PNG)
+# ============================================================================
+func eliminar_slot(numero_slot: int) -> bool:
+	# Validar que el número de slot sea válido
+	if numero_slot < 1 or numero_slot > NUMERO_SLOTS:
+		push_error("❌ Número de slot inválido: %d" % numero_slot)
+		return false
+	
+	# Crear las rutas de los archivos
+	var nombre_json = NOMBRE_ARCHIVO_JSON % numero_slot
+	var nombre_png = NOMBRE_ARCHIVO_PNG % numero_slot
+	var ruta_json = RUTA_BASE + nombre_json
+	var ruta_png = RUTA_BASE + nombre_png
+	
+	# Intentar eliminar el archivo JSON
+	if FileAccess.file_exists(ruta_json):
+		var error = DirAccess.remove_absolute(ruta_json)
+		if error == OK:
+			print("✓ Archivo JSON del Slot %d eliminado" % numero_slot)
+		else:
+			push_error("❌ Error al eliminar JSON del Slot %d" % numero_slot)
+	
+	# Intentar eliminar el archivo PNG
+	if ResourceLoader.exists(ruta_png):
+		var error = DirAccess.remove_absolute(ruta_png)
+		if error == OK:
+			print("✓ Archivo PNG del Slot %d eliminado" % numero_slot)
+		else:
+			push_error("❌ Error al eliminar PNG del Slot %d" % numero_slot)
+	
+	# Actualizar visualización
+	_actualizar_slot_visual(numero_slot)
+	
+	print("✓ Slot %d eliminado exitosamente" % numero_slot)
+	return true
+
+
+# ============================================================================
+# FUNCIÓN: Obtiene información de todos los slots para mostrar en interfaz
+# ============================================================================
+func obtener_informacion_todos_slots() -> Array:
+	var informacion_slots = []
+	
+	for slot_numero in range(1, NUMERO_SLOTS + 1):
+		var progreso = cargar_progreso_de_slot(slot_numero)
+		
+		var info_slot = {
+			"numero": slot_numero,
+			"ocupado": not progreso.is_empty(),
+			"capitulo": progreso.get("capitulo_actual", 0),
+			"dialogo": progreso.get("indice_dialogo", 0),
+			"fecha": _convertir_timestamp_a_texto(progreso.get("timestamp", 0))
+		}
+		
+		informacion_slots.append(info_slot)
+	
+	return informacion_slots
+
+
+# ============================================================================
+# FUNCIÓN AUXILIAR: Crear un progreso inicial por defecto
+# ============================================================================
+func _crear_progreso_inicial() -> Dictionary:
+	# Retorna un diccionario con los valores por defecto
+	return {
+		"numero_slot": slot_seleccionado,
+		"capitulo_actual": 1,
+		"indice_dialogo": 0,
+		"estado_puzzles": {
+			"puzzle_1": {"completado": false, "intentos": 0},
+			"puzzle_2": {"completado": false, "intentos": 0},
+			"puzzle_3": {"completado": false, "intentos": 0}
+		},
+		"timestamp": Time.get_ticks_msec()
+	}
+
+
+# ============================================================================
+# FUNCIÓN AUXILIAR: Valida la integridad de los datos del progreso
+# ============================================================================
+func _validar_datos_progreso(datos: Dictionary) -> bool:
+	# Verificar que existan los campos esenciales
+	var campos_requeridos = ["capitulo_actual", "indice_dialogo", "estado_puzzles"]
+	
+	for campo in campos_requeridos:
+		if not campo in datos:
+			push_error("Campo faltante en el progreso: " + campo)
+			return false
+	
+	# Validar que los tipos de datos sean correctos
+	if not datos.capitulo_actual is int:
+		push_error("capitulo_actual debe ser un entero")
+		return false
+	
+	if not datos.indice_dialogo is int:
+		push_error("indice_dialogo debe ser un entero")
+		return false
+	
+	if not datos.estado_puzzles is Dictionary:
+		push_error("estado_puzzles debe ser un diccionario")
+		return false
+	
+	return true
+
+
+# ============================================================================
+# FUNCIÓN PÚBLICA: Obtener el progreso cargado actualmente
+# ============================================================================
+func obtener_progreso_actual() -> Dictionary:
+	return progreso_actual
+
+
+# ============================================================================
+# FUNCIÓN PÚBLICA: Actualizar el progreso actual (cuando cambia capítulo, etc)
+# ============================================================================
+func actualizar_progreso_actual(datos: Dictionary) -> void:
+	progreso_actual = datos
+	print("📊 Progreso actualizado")
+
+
+# ============================================================================
+# FUNCIÓN PÚBLICA: Obtener el slot actualmente seleccionado
+# ============================================================================
+func obtener_slot_seleccionado() -> int:
+	return slot_seleccionado
+		
+		if progreso.is_empty() or progreso.capitulo_actual == 0:
+			# Slot vacío
+			boton.text = "Slot %d - [VACÍO]" % slot_numero
+		else:
+			# Slot con datos - mostrar capítulo y diálogo
+			boton.text = "Slot %d - Cap. %d | Diálogo %d" % [
+				slot_numero,
+				progreso.capitulo_actual,
+				progreso.indice_dialogo
+			]
+
+
+# ============================================================================
+# FUNCIÓN: Manejador para el botón Slot 1
+# ============================================================================
+func _on_slot1_pressed() -> void:
+	slot_seleccionado = 1
+	_procesar_slot(1)
+
+
+# ============================================================================
+# FUNCIÓN: Manejador para el botón Slot 2
+# ============================================================================
+func _on_slot2_pressed() -> void:
+	slot_seleccionado = 2
+	_procesar_slot(2)
+
+
+# ============================================================================
+# FUNCIÓN: Manejador para el botón Slot 3
+# ============================================================================
+func _on_slot3_pressed() -> void:
+	slot_seleccionado = 3
+	_procesar_slot(3)
+
+
+# ============================================================================
+# FUNCIÓN AUXILIAR: Procesa la acción del slot seleccionado
+# ============================================================================
+func _procesar_slot(numero_slot: int) -> void:
+	print("📌 Slot %d seleccionado" % numero_slot)
+	
+	# Cargar el progreso del slot
+	var progreso = cargar_progreso_de_slot(numero_slot)
+	
+	if progreso.is_empty():
+		print("⚠ El slot %d está vacío. Creando nuevo guardado..." % numero_slot)
+		progreso = _crear_progreso_inicial()
+	
+	# Almacenar el progreso actual
+	progreso_actual = progreso
+	
+	print("✓ Slot %d cargado exitosamente" % numero_slot)
+	print("  → Capítulo: %d | Diálogo: %d" % [progreso.capitulo_actual, progreso.indice_dialogo])
+
+
+# ============================================================================
+# FUNCIÓN PRINCIPAL: Guarda el progreso en un slot específico
+# Escribe en: user://slot1.json, user://slot2.json o user://slot3.json
+# ============================================================================
+func guardar_progreso_en_slot(numero_slot: int) -> bool:
+	# Validar que el número de slot sea válido
+	if numero_slot < 1 or numero_slot > NUMERO_SLOTS:
+		push_error("❌ Número de slot inválido: %d. Debe estar entre 1 y %d" % [numero_slot, NUMERO_SLOTS])
+		return false
+	
+	# Crear la ruta del archivo para este slot
+	var nombre_archivo = NOMBRE_ARCHIVO % numero_slot
+	var ruta_archivo = RUTA_BASE + nombre_archivo
+	
+	# Validar que hay datos de progreso
+	if progreso_actual.is_empty():
+		push_error("❌ No hay datos de progreso para guardar")
+		return false
+	
+	# Crear el diccionario con los datos del progreso
+	var datos_progreso = {
+		"numero_slot": numero_slot,
+		"capitulo_actual": progreso_actual.get("capitulo_actual", 1),
+		"indice_dialogo": progreso_actual.get("indice_dialogo", 0),
+		"estado_puzzles": progreso_actual.get("estado_puzzles", {}),
+		"timestamp": Time.get_ticks_msec()
+	}
+	
+	# Convertir el diccionario a formato JSON con indentación
+	var json_string = JSON.stringify(datos_progreso, "\t")
+	
+	# Crear un objeto File para escribir
+	var archivo = FileAccess.open(ruta_archivo, FileAccess.WRITE)
+	
+	# Verificar si el archivo se abrió correctamente
+	if archivo == null:
+		push_error("❌ No se pudo abrir el archivo: " + ruta_archivo)
+		return false
+	
+	# Escribir el contenido JSON en el archivo
+	archivo.store_string(json_string)
+	
+	# Confirmar que el archivo se guardó correctamente
+	if FileAccess.file_exists(ruta_archivo):
+		print("✓ Progreso guardado en Slot %d: %s" % [numero_slot, ruta_archivo])
+		actualizar_informacion_slots()
+		return true
+	else:
+		push_error("❌ Error al guardar el archivo de progreso en el slot %d" % numero_slot)
+		return false
+
+
+# ============================================================================
+# FUNCIÓN PRINCIPAL: Carga el progreso desde un slot específico
+# Lee desde: user://slot1.json, user://slot2.json o user://slot3.json
+# Si no existe, retorna un diccionario vacío
+# ============================================================================
+func cargar_progreso_de_slot(numero_slot: int) -> Dictionary:
+	# Validar que el número de slot sea válido
+	if numero_slot < 1 or numero_slot > NUMERO_SLOTS:
+		push_error("❌ Número de slot inválido: %d. Debe estar entre 1 y %d" % [numero_slot, NUMERO_SLOTS])
+		return {}
+	
+	# Crear la ruta del archivo para este slot
+	var nombre_archivo = NOMBRE_ARCHIVO % numero_slot
+	var ruta_archivo = RUTA_BASE + nombre_archivo
+	
+	# Verificar si el archivo existe
+	if not FileAccess.file_exists(ruta_archivo):
+		print("⚠ Slot %d vacío - Archivo no encontrado: %s" % [numero_slot, ruta_archivo])
+		return {}
+	
+	# Intenta leer el archivo de progreso
+	var archivo = FileAccess.open(ruta_archivo, FileAccess.READ)
+	if archivo == null:
+		push_error("❌ No se pudo abrir el archivo del Slot %d: %s" % [numero_slot, ruta_archivo])
+		return {}
+	
+	# Obtener todo el contenido del archivo como string
+	var contenido_json = archivo.get_as_text()
+	
+	# Validar que el contenido no esté vacío
+	if contenido_json.is_empty():
+		push_error("❌ El archivo del Slot %d está vacío: %s" % [numero_slot, ruta_archivo])
+		return {}
+	
+	# Parsear el contenido JSON a un diccionario
+	var json = JSON.new()
+	var error = json.parse(contenido_json)
+	
+	# Verificar si el parseo fue exitoso
+	if error != OK:
+		push_error("❌ Error al parsear JSON del Slot %d: %s" % [numero_slot, json.get_error_message()])
+		return {}
+	
+	# Validar que los datos parseados sean un diccionario
+	var datos = json.data
+	if datos is not Dictionary:
+		push_error("❌ Formato JSON inválido en Slot %d: los datos no son un diccionario" % numero_slot)
+		return {}
+	
+	# Validar que contiene los campos esenciales
+	if not _validar_datos_progreso(datos):
+		push_error("❌ El archivo del Slot %d está corrupto o incompleto" % numero_slot)
+		return {}
+	
+	# Progreso cargado exitosamente
+	print("✓ Progreso cargado del Slot %d" % numero_slot)
+	
+	return datos
+
+
+# ============================================================================
+# FUNCIÓN: Elimina (borra) todos los datos de un slot específico
+# ============================================================================
+func eliminar_slot(numero_slot: int) -> bool:
+	# Validar que el número de slot sea válido
+	if numero_slot < 1 or numero_slot > NUMERO_SLOTS:
+		push_error("❌ Número de slot inválido: %d" % numero_slot)
+		return false
+	
+	# Crear la ruta del archivo para este slot
+	var nombre_archivo = NOMBRE_ARCHIVO % numero_slot
+	var ruta_archivo = RUTA_BASE + nombre_archivo
+	
+	# Verificar si el archivo existe
+	if not FileAccess.file_exists(ruta_archivo):
+		print("⚠ El Slot %d ya está vacío" % numero_slot)
+		return true
+	
+	# Intentar eliminar el archivo
+	var error = DirAccess.remove_absolute(ruta_archivo)
+	
+	if error == OK:
+		print("✓ Slot %d eliminado exitosamente" % numero_slot)
+		actualizar_informacion_slots()
+		return true
+	else:
+		push_error("❌ Error al eliminar el Slot %d" % numero_slot)
+		return false
+
+
+# ============================================================================
+# FUNCIÓN: Obtiene la información de todos los slots
+# Retorna un array con los datos de cada slot (vacío si no existe)
+# ============================================================================
+func obtener_informacion_todos_slots() -> Array:
+	var informacion_slots = []
+	
+	for slot_numero in range(1, NUMERO_SLOTS + 1):
+		var progreso = cargar_progreso_de_slot(slot_numero)
+		
+		var info_slot = {
+			"numero": slot_numero,
+			"ocupado": not progreso.is_empty(),
+			"capitulo": progreso.get("capitulo_actual", 0),
+			"dialogo": progreso.get("indice_dialogo", 0),
+			"timestamp": progreso.get("timestamp", 0)
+		}
+		
+		informacion_slots.append(info_slot)
+	
+	return informacion_slots
+
+
+# ============================================================================
+# FUNCIÓN AUXILIAR: Crear un progreso inicial por defecto
+# ============================================================================
+func _crear_progreso_inicial() -> Dictionary:
+	# Retorna un diccionario con los valores por defecto
+	return {
+		"numero_slot": 0,
+		"capitulo_actual": 1,
+		"indice_dialogo": 0,
+		"estado_puzzles": {
+			"puzzle_1": {"completado": false, "intentos": 0},
+			"puzzle_2": {"completado": false, "intentos": 0},
+			"puzzle_3": {"completado": false, "intentos": 0}
+		},
+		"timestamp": Time.get_ticks_msec()
+	}
+
+
+# ============================================================================
+# FUNCIÓN AUXILIAR: Validar la integridad de los datos del progreso
+# ============================================================================
+func _validar_datos_progreso(datos: Dictionary) -> bool:
+	# Verificar que existan los campos esenciales
+	var campos_requeridos = ["capitulo_actual", "indice_dialogo", "estado_puzzles"]
+	
+	for campo in campos_requeridos:
+		if not campo in datos:
+			push_error("Campo faltante en el progreso: " + campo)
+			return false
+	
+	# Validar que los tipos de datos sean correctos
+	if not datos.capitulo_actual is int:
+		push_error("capitulo_actual debe ser un entero")
+		return false
+	
+	if not datos.indice_dialogo is int:
+		push_error("indice_dialogo debe ser un entero")
+		return false
+	
+	if not datos.estado_puzzles is Dictionary:
+		push_error("estado_puzzles debe ser un diccionario")
+		return false
+	
+	return true
+
+
+# ============================================================================
+# FUNCIÓN PÚBLICA: Obtener el progreso actualmente cargado
+# ============================================================================
+func obtener_progreso_actual() -> Dictionary:
+	return progreso_actual
+
+
+# ============================================================================
+# FUNCIÓN PÚBLICA: Actualizar el progreso actual
+# Se usa cuando cambia el capítulo o el diálogo en el juego
+# ============================================================================
+func actualizar_progreso_actual(datos: Dictionary) -> void:
+	progreso_actual = datos
+	print("📊 Progreso actualizado")
+
+
+# ============================================================================
+# FUNCIÓN PÚBLICA: Obtener el slot actualmente seleccionado
+# ============================================================================
+func obtener_slot_seleccionado() -> int:
+	return slot_seleccionado

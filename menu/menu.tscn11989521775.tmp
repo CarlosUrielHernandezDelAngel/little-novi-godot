@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://ceob8nw7tduw1"]
+
+[ext_resource type="Script" uid="uid://n56ryd4labrr" path="res://menu/menu.gd" id="1_g18jx"]
+[ext_resource type="Texture2D" uid="uid://diucxwemdpowq" path="res://assets/f661c394124b4ed6e4ebd47ddf6ac557~2.jpg" id="2_6nwqt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g18jx"]
+bg_color = Color(0.3534693, 0.77931505, 0.9428401, 0.93333334)
+
+[node name="Control" type="Control" unique_id=1820708934]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g18jx")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=192405851]
+layout_mode = 0
+offset_right = 1130.0
+offset_bottom = 645.0
+texture = ExtResource("2_6nwqt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1389216836]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -41.0
+offset_top = -33.0
+offset_right = 41.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="inicio" type="Button" parent="VBoxContainer" unique_id=585440515]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+text = "inicio"
+
+[node name="acercade" type="Button" parent="VBoxContainer" unique_id=1697801744]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+text = "acerca de"
+
+[node name="sobreeljuego" type="Button" parent="VBoxContainer" unique_id=909954538]
+layout_mode = 2
+text = "Sobre el juego "
+
+[node name="Panel" type="Panel" parent="." unique_id=1687175339]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -490.0
+offset_top = -296.0
+offset_right = 487.0
+offset_bottom = 297.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g18jx")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel" unique_id=903630956]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 69.0
+offset_right = 886.0
+offset_bottom = 460.0
+text = "Alumnos: Nancy Nahomy Sanchez Cervantes 
+Carlos Uriel Hernandez Del Angel
+Materia: Imoplementa aplicaciones moviles multiplataformas 
+Tc-6-Proyecto final -Desarrollo de app Implementacion"
+
+[node name="Button" type="Button" parent="Panel" unique_id=791944861]
+layout_mode = 0
+offset_left = 183.0
+offset_top = 404.0
+offset_right = 742.0
+offset_bottom = 476.0
+text = "Cerrar"

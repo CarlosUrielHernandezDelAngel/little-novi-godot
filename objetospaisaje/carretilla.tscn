@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bujnbyqmh1ig7"]
+
+[ext_resource type="Texture2D" uid="uid://doaiahn2u25bq" path="res://assets/2 Objects/6 Tent/1.png" id="1_inj1b"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_a4g7t"]
+a = Vector2(0, -53)
+b = Vector2(1, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5niob"]
+size = Vector2(74, 27)
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=733165964]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1907727246]
+position = Vector2(31.000004, 26)
+scale = Vector2(1.8150685, 1.823077)
+texture = ExtResource("1_inj1b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=347726339]
+position = Vector2(-24, 73)
+shape = SubResource("SegmentShape2D_a4g7t")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1687525030]
+position = Vector2(84, 47)
+shape = SubResource("SegmentShape2D_a4g7t")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="." unique_id=1710404357]
+position = Vector2(49, 71.5)
+shape = SubResource("RectangleShape2D_5niob")

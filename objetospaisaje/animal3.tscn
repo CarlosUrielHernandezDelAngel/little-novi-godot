@@ -1,0 +1,142 @@
+[gd_scene format=3 uid="uid://cvuad5c28yhcs"]
+
+[ext_resource type="Script" uid="uid://dprhf7bx712g0" path="res://objetospaisaje/animal_1.gd" id="1_fm14o"]
+[ext_resource type="Texture2D" uid="uid://emplbc42iata" path="res://animales/Fox_Run.png" id="2_fm14o"]
+[ext_resource type="Texture2D" uid="uid://bswqg53pd38wm" path="res://animales/Fox_Idle.png" id="3_x2gct"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fm14o"]
+size = Vector2(46, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1vx7c"]
+atlas = ExtResource("2_fm14o")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xtr4m"]
+atlas = ExtResource("2_fm14o")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofegd"]
+atlas = ExtResource("2_fm14o")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ga4j"]
+atlas = ExtResource("2_fm14o")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tqcce"]
+atlas = ExtResource("2_fm14o")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sa4mr"]
+atlas = ExtResource("2_fm14o")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jw0li"]
+atlas = ExtResource("3_x2gct")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dri87"]
+atlas = ExtResource("3_x2gct")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tdrir"]
+atlas = ExtResource("3_x2gct")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aruot"]
+atlas = ExtResource("3_x2gct")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vu7hl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1vx7c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xtr4m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ofegd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ga4j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tqcce")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sa4mr")
+}],
+"loop": true,
+"name": &"feliz",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jw0li")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dri87")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tdrir")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aruot")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fm14o"]
+bg_color = Color(0.86036915, 0.8603692, 0.8603691, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jpaub"]
+radius = 14.0
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=1426212665]
+position = Vector2(-22, -2)
+script = ExtResource("1_fm14o")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1286597449]
+position = Vector2(52, -26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1247528553]
+position = Vector2(-1, -47)
+shape = SubResource("RectangleShape2D_fm14o")
+
+[node name="SpriteAnimal" type="AnimatedSprite2D" parent="." unique_id=1841459645]
+position = Vector2(53, -81)
+scale = Vector2(3.1562498, 3.2187502)
+sprite_frames = SubResource("SpriteFrames_vu7hl")
+animation = &"idle"
+frame_progress = 0.041749883
+
+[node name="TextoCorazon" type="Label" parent="." unique_id=1590083047]
+visible = false
+offset_left = 83.0
+offset_top = -136.0
+offset_right = 127.0
+offset_bottom = -91.0
+theme_override_font_sizes/font_size = 32
+text = "💕"
+
+[node name="TextoDialogo" type="Label" parent="." unique_id=2054594139]
+visible = false
+offset_left = 86.0
+offset_top = -96.0
+offset_right = 154.0
+offset_bottom = -73.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_fm14o")
+text = "Pulsa al animal para acariciar"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1241577360]
+position = Vector2(51, -59)
+shape = SubResource("CircleShape2D_jpaub")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

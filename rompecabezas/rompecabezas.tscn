@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://xb6k33vdtd2i"]
+
+[ext_resource type="Script" uid="uid://b8ht1ysflx14g" path="res://rompecabezas/rompecabezas.gd" id="1_mnacj"]
+[ext_resource type="Texture2D" uid="uid://cw7q2xxa70si3" path="res://assets/texture/vecteezy_wood-table-texture_1227153.jpg" id="2_mnacj"]
+[ext_resource type="Texture2D" uid="uid://cpww0irsaeaba" path="res://rompecabezas/imagy-split-image-2026-06-08/floresr_r1_c1.png" id="3_egs0s"]
+[ext_resource type="Texture2D" uid="uid://w14vin83jhlc" path="res://rompecabezas/imagy-split-image-2026-06-08/floresr_r1_c2.png" id="4_uchcr"]
+[ext_resource type="Texture2D" uid="uid://dmpao8ide1yex" path="res://rompecabezas/imagy-split-image-2026-06-08/floresr_r1_c3.png" id="5_hjreu"]
+[ext_resource type="Texture2D" uid="uid://7ceuxcjclk5a" path="res://rompecabezas/imagy-split-image-2026-06-08/floresr_r2_c1.png" id="6_nifru"]
+[ext_resource type="Texture2D" uid="uid://ct55pm3payrpc" path="res://rompecabezas/imagy-split-image-2026-06-08/floresr_r2_c2.png" id="7_7c211"]
+[ext_resource type="Texture2D" uid="uid://dqka3bv8ilu0r" path="res://rompecabezas/imagy-split-image-2026-06-08/floresr_r2_c3.png" id="8_c71je"]
+[ext_resource type="Texture2D" uid="uid://daid58tk4dahi" path="res://rompecabezas/imagy-split-image-2026-06-08/floresr_r3_c1.png" id="9_i1n77"]
+[ext_resource type="Texture2D" uid="uid://ccidgvob5alu8" path="res://rompecabezas/imagy-split-image-2026-06-08/floresr_r3_c2.png" id="10_tote5"]
+
+[node name="Control" type="Control" unique_id=282113065]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_mnacj")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1795320803]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 0.5
+offset_left = -9.0
+offset_right = 1169.0
+offset_bottom = 635.0
+mouse_filter = 2
+texture = ExtResource("2_mnacj")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="GridContainer" type="GridContainer" parent="TextureRect" unique_id=238975896]
+layout_mode = 0
+offset_left = 356.0
+offset_top = 139.0
+offset_right = 782.0
+offset_bottom = 539.0
+mouse_filter = 2
+columns = 3
+
+[node name="TextureButton" type="TextureButton" parent="TextureRect/GridContainer" unique_id=1709248500]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("3_egs0s")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureButton8" type="TextureButton" parent="TextureRect/GridContainer" unique_id=1552299368]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("10_tote5")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureButton6" type="TextureButton" parent="TextureRect/GridContainer" unique_id=38889937]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("8_c71je")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureButton3" type="TextureButton" parent="TextureRect/GridContainer" unique_id=1517305319]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("5_hjreu")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureButton2" type="TextureButton" parent="TextureRect/GridContainer" unique_id=1035247988]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("4_uchcr")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureButton4" type="TextureButton" parent="TextureRect/GridContainer" unique_id=747550152]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("6_nifru")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureButton7" type="TextureButton" parent="TextureRect/GridContainer" unique_id=1690443575]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("9_i1n77")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureButton5" type="TextureButton" parent="TextureRect/GridContainer" unique_id=617612528]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("7_7c211")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureButton9" type="TextureButton" parent="TextureRect/GridContainer" unique_id=198204413]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MensajeVictoria" type="Label" parent="." unique_id=1144320458]
+visible = false
+layout_mode = 0
+offset_left = 438.0
+offset_top = 33.0
+offset_right = 689.0
+offset_bottom = 101.0
+theme_override_font_sizes/font_size = 30
+text = "¡Puzzle logrado!"
